@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic Course Selector</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    .step {
+      margin: 30px auto;
+      max-width: 400px;
+      animation: fadeIn 1s ease-in-out forwards;
+    }
+    select {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      background-color: #fff;
+      color: #333;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+    select:focus {
+      outline: none;
+      box-shadow: 0 0 8px #00f2fe;
+      transform: scale(1.03);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎓 University Course Selector</h1>
+
+  <div class="step">
+    <label for="university">Select Your University</label>
+    <select id="university">
+      <option value="">-- Choose University --</option>
+    </select>
+  </div>
+
+  <div class="step">
+    <label for="course">Select Your Course</label>
+    <select id="course">
+      <option value="">-- Choose Course --</option>
+    </select>
+  </div>
+
+  <div class="step">
+    <label for="subject">Select Your Subject</label>
+    <select id="subject">
+      <option value="">-- Choose Subject --</option>
+    </select>
+  </div>
+
+  <script>
+    const data = {
+      "Delhi University": {
+        "B.Sc.": ["Mathematics", "Physics", "Chemistry", "Botany", "Zoology"],
+        "B.A.": ["History", "Political Science", "Sociology", "English"],
+        "B.Com": ["Accountancy", "Economics", "Business Studies"]
+      },
+      "JNU": {
+        "B.Sc.": ["Physics", "Chemistry", "Geology"],
+        "B.A.": ["Sociology", "Linguistics", "Geography"],
+        "B.Tech": ["Computer Science", "Electrical", "Mechanical"]
+      },
+      "BHU": {
+        "B.Sc.": ["Mathematics", "Botany", "Zoology"],
+        "B.A.": ["Philosophy", "History", "Psychology"],
+        "B.Com": ["Taxation", "Auditing", "Economics"]
+      },
+      "AMU": {
+        "B.Sc.": ["Physics", "Chemistry", "Mathematics", "Geology"],
+        "B.A.": ["Arabic", "Urdu", "History"],
+        "B.Tech": ["Civil", "Computer", "Electronics"]
+      }
+    };
+
+    const universitySelect = document.getElementById('university');
+    const courseSelect = document.getElementById('course');
+    const subjectSelect = document.getElementById('subject');
+
+    // Populate Universities
+    Object.keys(data).forEach(university => {
+      const option = document.createElement('option');
+      option.value = university;
+      option.text = university;
+      universitySelect.appendChild(option);
+    });
+
+    universitySelect.addEventListener('change', () => {
+      const selectedUni = universitySelect.value;
+      courseSelect.innerHTML = '<option value="">-- Choose Course --</option>';
+      subjectSelect.innerHTML = '<option value="">-- Choose Subject --</option>';
+
+      if (data[selectedUni]) {
+        Object.keys(data[selectedUni]).forEach(course => {
+          const option = document.createElement('option');
+          option.value = course;
+          option.text = course;
+          courseSelect.appendChild(option);
+        });
+      }
+    });
+
+    courseSelect.addEventListener('change', () => {
+      const selectedUni = universitySelect.value;
+      const selectedCourse = courseSelect.value;
+      subjectSelect.innerHTML = '<option value="">-- Choose Subject --</option>';
+
+      if (data[selectedUni] && data[selectedUni][selectedCourse]) {
+        data[selectedUni][selectedCourse].forEach(subject => {
+          const option = document.createElement('option');
+          option.value = subject;
+          option.text = subject;
+          subjectSelect.appendChild(option);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
